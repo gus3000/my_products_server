@@ -15,6 +15,7 @@
         "symfony/yaml": "7.2.*"
     },
     "require-dev": {
+        "zenstruck/foundry": "^2.3"
     },
     "config": {
         "allow-plugins": {
