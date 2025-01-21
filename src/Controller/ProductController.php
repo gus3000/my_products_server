@@ -1,23 +1,24 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Controller;
 
-use App\Product\ViewModel\ProductDTO;
+use App\Repository\ProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 
 class ProductController extends AbstractController
 {
-    #[Route('/products')]
+    public function __construct(
+        private readonly ProductRepository $productRepository,
+    )
+    {
+    }
+
+    #[Route('/product', name: 'app_product')]
     public function index(): JsonResponse
     {
-        $products = [];
-        for ($i = 0; $i < 20; $i++) {
-            $products[] = ProductDTO::random();
-        }
+        $products = $this->productRepository->findAll();
 
         return $this->json($products);
     }
