@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 declare(strict_types=1);
 
@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20250105133546 extends AbstractMigration
+final class Version20250121210010 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -22,19 +22,9 @@ final class Version20250105133546 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE TABLE product (
           id INT AUTO_INCREMENT NOT NULL,
-          gtin INT NOT NULL,
-          brand VARCHAR(255) DEFAULT NULL,
-          model VARCHAR(255) DEFAULT NULL,
+          gtin VARCHAR(255) NOT NULL,
           name VARCHAR(255) NOT NULL,
-          last_updated VARCHAR(255) DEFAULT NULL,
-          gs1_country VARCHAR(255) DEFAULT NULL,
-          gtin_type VARCHAR(255) DEFAULT NULL,
-          offers_count VARCHAR(255) DEFAULT NULL,
-          min_price VARCHAR(255) DEFAULT NULL,
-          min_price_compensation VARCHAR(255) DEFAULT NULL,
-          currency VARCHAR(255) DEFAULT NULL,
-          categories VARCHAR(255) DEFAULT NULL,
-          url VARCHAR(255) DEFAULT NULL,
+          UNIQUE INDEX UNIQ_D34A04ADCA784C9B (gtin),
           PRIMARY KEY(id)
         ) DEFAULT CHARACTER
         SET
