@@ -1,0 +1,20 @@
+{
+    "name": "server/castor",
+    "description": "Castor commands for project server",
+    "type": "castor-project",
+    "require": {
+        "friendsofphp/php-cs-fixer": "^3.68",
+        "phpstan/phpstan": "^2.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Server\\Castor\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "gus3000",
+            "email": "gus3000spam@gmail.com"
+        }
+    ]
+}

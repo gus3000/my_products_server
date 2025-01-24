@@ -20,6 +20,7 @@ class ProductRepository extends ServiceEntityRepository
     {
         $this->getEntityManager()->persist($product);
         $this->getEntityManager()->flush();
+
         return $product;
     }
 }

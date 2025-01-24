@@ -23,19 +23,18 @@ use Symfony\Component\Serializer\SerializerInterface;
 #[AsCommand(name: 'app:product:import:openfoodfacts', description: 'Hello PhpStorm')]
 class OpenFoodFactsProductsImportCommand extends Command
 {
-    const DOWNLOAD_URL = 'https://static.openfoodfacts.org/data/openfoodfacts-products.jsonl.gz';
-//    const IMPORT_FILE_NAME = 'openfoodfacts-products.jsonl.gz';
-    const IMPORT_FILE_NAME = 'openfoodfacts_products_1737199719_1737286109.json.gz';
-    const EXTRACTED_FILE_NAME = 'openfoodfacts-products.jsonl';
+    public const DOWNLOAD_URL = 'https://static.openfoodfacts.org/data/openfoodfacts-products.jsonl.gz';
+    //    const IMPORT_FILE_NAME = 'openfoodfacts-products.jsonl.gz';
+    public const IMPORT_FILE_NAME = 'openfoodfacts_products_1737199719_1737286109.json.gz';
+    public const EXTRACTED_FILE_NAME = 'openfoodfacts-products.jsonl';
 
     public function __construct(
-        private readonly string              $storageDirectory,
-//        private readonly GZipExtract $gZipExtract,
-        private readonly GZipExec            $gzipExec,
+        private readonly string $storageDirectory,
+        //        private readonly GZipExtract $gZipExtract,
+        private readonly GZipExec $gzipExec,
         private readonly SerializerInterface $serializer,
-        private readonly ProductImporter     $productImporter,
-    )
-    {
+        private readonly ProductImporter $productImporter,
+    ) {
         parent::__construct();
     }
 
@@ -46,35 +45,35 @@ class OpenFoodFactsProductsImportCommand extends Command
         }
 
         $io = new SymfonyStyle($input, $output);
-//        $section = new ConsoleSectionOutput($output);
+        //        $section = new ConsoleSectionOutput($output);
         $debugSection = $output->section();
-//        $progress =new ProgressBar($section);
+        //        $progress =new ProgressBar($section);
         $progress = $io->createProgressBar();
         $progress->setOverwrite(true);
 
         $io->block("checking directory $this->storageDirectory for imported file...");
-//        $extractedFilePath = "$this->storageDirectory/" . self::EXTRACTED_FILE_NAME;
-        $compressedFilePath = "$this->storageDirectory/" . self::IMPORT_FILE_NAME;
+        //        $extractedFilePath = "$this->storageDirectory/" . self::EXTRACTED_FILE_NAME;
+        $compressedFilePath = "$this->storageDirectory/".self::IMPORT_FILE_NAME;
 
         $progress->start();
         $successful = $failed = 0;
         $missingFields = [];
         $products = [];
-        ($this->gzipExec)($compressedFilePath, function (string $line)
-        use ($progress, &$products, &$successful, &$failed, &$missingFields): void {
+        ($this->gzipExec)($compressedFilePath, function (string $line) use ($progress, &$products, &$successful, &$failed, &$missingFields): void {
             $progress->advance();
             try {
                 $productDTO = $this->serializer->deserialize($line, ProductImportDTO::class, 'json');
-                $progress->setMessage("" . $productDTO->code);
+                $progress->setMessage(''.$productDTO->code);
                 $products[] = $productDTO;
-                $successful++;
-//                file_put_contents($this->storageDirectory . "/sample.json", $line);
+                ++$successful;
+                //                file_put_contents($this->storageDirectory . "/sample.json", $line);
             } catch (MissingConstructorArgumentsException $e) {
-                $failed++;
+                ++$failed;
                 foreach ($e->getMissingConstructorArguments() as $missing) {
                     $missingFields[$missing] ??= 0;
-                    $missingFields[$missing]++;
+                    ++$missingFields[$missing];
                 }
+
                 return;
             } catch (\Exception $e) {
                 $filesystem = new Filesystem();
@@ -84,29 +83,27 @@ class OpenFoodFactsProductsImportCommand extends Command
             }
         });
 
-
         $progress->finish();
 
         $io->success("successfully imported $successful products");
         if ($failed > 0) {
             $io->warning("failed to import $failed products");
-            $io->warning("fields missing :\n" . join("\n", array_map(fn($key) => $key . " x" . $missingFields[$key], array_keys($missingFields))));
+            $io->warning("fields missing :\n".join("\n", array_map(fn ($key) => $key.' x'.$missingFields[$key], array_keys($missingFields))));
         }
 
-            ($this->productImporter)($products);
-//        $filesystem = new Filesystem();
-//        if (!$filesystem->exists($extractedFilePath)) {
-//            if (!$filesystem->exists($compressedFilePath)) {
-//                $io->warning("Download not implemented yet, download it yourself and put it in $this->storageDirectory");
-//                return Command::FAILURE;
-//            }
-//
-//            $io->block("Compressed file found, extracting...");
-//            ($this->gZipExtract)($compressedFilePath, $extractedFilePath);
-//        }
+        ($this->productImporter)($products);
+        //        $filesystem = new Filesystem();
+        //        if (!$filesystem->exists($extractedFilePath)) {
+        //            if (!$filesystem->exists($compressedFilePath)) {
+        //                $io->warning("Download not implemented yet, download it yourself and put it in $this->storageDirectory");
+        //                return Command::FAILURE;
+        //            }
+        //
+        //            $io->block("Compressed file found, extracting...");
+        //            ($this->gZipExtract)($compressedFilePath, $extractedFilePath);
+        //        }
 
-//        $importFile = fopen($extractedFilePath, "r");
-
+        //        $importFile = fopen($extractedFilePath, "r");
 
         return Command::SUCCESS;
     }

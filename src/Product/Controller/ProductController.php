@@ -11,8 +11,7 @@ class ProductController extends AbstractController
 {
     public function __construct(
         private readonly ProductRepository $productRepository,
-    )
-    {
+    ) {
     }
 
     #[Route('/product', name: 'app_product')]

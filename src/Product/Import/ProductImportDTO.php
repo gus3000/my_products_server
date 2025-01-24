@@ -7,11 +7,10 @@ use Symfony\Component\Serializer\Attribute\SerializedName;
 class ProductImportDTO
 {
     public function __construct(
-        #[SerializedName("code")]
+        #[SerializedName('code')]
         public readonly string $code,
-        #[SerializedName("product_name")]
+        #[SerializedName('product_name')]
         public readonly string $name,
-    )
-    {
+    ) {
     }
 }

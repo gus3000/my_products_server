@@ -1,0 +1,6 @@
+parameters:
+	level: max
+	paths:
+		- src
+	ignoreErrors:
+	    - '#::\$id is never written, only read.#'
