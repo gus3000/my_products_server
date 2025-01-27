@@ -23,4 +23,11 @@ class ProductRepository extends ServiceEntityRepository
 
         return $product;
     }
+
+    public function findOneByGtin(int $gtin): ?Product
+    {
+        return $this->findOneBy([
+            'gtin' => $gtin,
+        ]);
+    }
 }

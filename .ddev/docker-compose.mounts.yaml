@@ -1,0 +1,4 @@
+services:
+  web:
+    volumes:
+      - "./var/tmp/ddev:/tmp/web"

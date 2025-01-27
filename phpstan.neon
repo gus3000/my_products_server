@@ -3,4 +3,4 @@ parameters:
 	paths:
 		- src
 	ignoreErrors:
-	    - '#::\$id is never written, only read.#'
+#	    - '#::\$id is never written, only read.#'

@@ -11,6 +11,10 @@ class ProductImportDTO
         public readonly string $code,
         #[SerializedName('product_name')]
         public readonly string $name,
+        #[SerializedName('lang')]
+        public readonly string $lang,
+        #[SerializedName('brands')]
+        public readonly ?string $brands = null,
     ) {
     }
 }

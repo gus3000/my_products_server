@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Product\Import\Command;
 
+use App\Product\Code\Code;
 use App\Product\Import\GZipExec;
 use App\Product\Import\GZipExtract;
 use App\Product\Import\ProductImportDTO;
@@ -12,6 +13,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\ConsoleSectionOutput;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -19,13 +21,14 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Serializer\Exception\MissingConstructorArgumentsException;
 use Symfony\Component\Serializer\SerializerInterface;
+use Webmozart\Assert\Assert;
 
 #[AsCommand(name: 'app:product:import:openfoodfacts', description: 'Hello PhpStorm')]
 class OpenFoodFactsProductsImportCommand extends Command
 {
     public const DOWNLOAD_URL = 'https://static.openfoodfacts.org/data/openfoodfacts-products.jsonl.gz';
-    //    const IMPORT_FILE_NAME = 'openfoodfacts-products.jsonl.gz';
-    public const IMPORT_FILE_NAME = 'openfoodfacts_products_1737199719_1737286109.json.gz';
+    public const IMPORT_FILE_NAME = 'openfoodfacts-products.jsonl.gz';
+    //    public const IMPORT_FILE_NAME = 'openfoodfacts_products_1737199719_1737286109.json.gz';
     public const EXTRACTED_FILE_NAME = 'openfoodfacts-products.jsonl';
 
     public function __construct(
@@ -38,11 +41,23 @@ class OpenFoodFactsProductsImportCommand extends Command
         parent::__construct();
     }
 
+    protected function configure(): void
+    {
+        $this->addOption('stopAfter', null, InputOption::VALUE_REQUIRED, 'stop the import after X entries', '-1');
+    }
+
+    /**
+     * @throws \Exception
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if (!$output instanceof ConsoleOutputInterface) {
             throw new \LogicException('This command accepts only an instance of "ConsoleOutputInterface".');
         }
+
+        $stopAfter = $input->getOption('stopAfter');
+        Assert::string($stopAfter);
+        $stopAfter = (int) $stopAfter;
 
         $io = new SymfonyStyle($input, $output);
         //        $section = new ConsoleSectionOutput($output);
@@ -59,14 +74,30 @@ class OpenFoodFactsProductsImportCommand extends Command
         $successful = $failed = 0;
         $missingFields = [];
         $products = [];
-        ($this->gzipExec)($compressedFilePath, function (string $line) use ($progress, &$products, &$successful, &$failed, &$missingFields): void {
-            $progress->advance();
+        ($this->gzipExec)($compressedFilePath, function (string $line) use ($progress, &$products, &$successful, &$failed, &$missingFields): bool {
             try {
                 $productDTO = $this->serializer->deserialize($line, ProductImportDTO::class, 'json');
+                if ($productDTO->lang !== 'fr') {
+                    return false;
+                }
+
+                $code = new Code($productDTO->code);
+                if (!$code->isControlKeyValid()) {
+                    ++$failed;
+
+                    return false;
+                }
+
+                $progress->advance();
                 $progress->setMessage(''.$productDTO->code);
                 $products[] = $productDTO;
                 ++$successful;
-                //                file_put_contents($this->storageDirectory . "/sample.json", $line);
+
+                return true;
+
+                //                if ($productDTO->code === '3596710536047') {
+                //                    file_put_contents($this->storageDirectory.'/sample.json', $line);
+                //                }
             } catch (MissingConstructorArgumentsException $e) {
                 ++$failed;
                 foreach ($e->getMissingConstructorArguments() as $missing) {
@@ -74,14 +105,15 @@ class OpenFoodFactsProductsImportCommand extends Command
                     ++$missingFields[$missing];
                 }
 
-                return;
+                return false;
             } catch (\Exception $e) {
                 $filesystem = new Filesystem();
-                $tmpFile = $filesystem->tempnam(sys_get_temp_dir(), 'import_failed_line', '.json');
+                $tmpFile = $filesystem->tempnam(sys_get_temp_dir(), 'web/import_failed_line', '.json');
                 file_put_contents($tmpFile, $line);
-                throw new \Exception("Could not import product ({$e->getMessage()}), offending line saved in $tmpFile");
+
+                throw new \Exception("Could not import product ({$e->getMessage()}), offending line saved in $tmpFile", previous: $e);
             }
-        });
+        }, $stopAfter);
 
         $progress->finish();
 
