@@ -11,3 +11,4 @@
 
 data/*
 .castor.stub.php
+.php-cs-fixer.cache

@@ -11,7 +11,7 @@ class ProductDTOFactory
         return new ProductDTO(
             $product->getName(),
             strval($product->getGtin()),
-            $product->getBrand() ?? '',
+            $product->getBrands() ?? '',
         );
     }
 }

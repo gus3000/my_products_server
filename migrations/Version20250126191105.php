@@ -18,7 +18,7 @@ final class Version20250126191105 extends AbstractMigration
     {
         $this->addSql('CREATE TABLE product (
           gtin BIGINT NOT NULL,
-          brand VARCHAR(255) DEFAULT NULL,
+          brands VARCHAR(255) DEFAULT NULL,
           name VARCHAR(255) NOT NULL,
           PRIMARY KEY(gtin)
         ) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB');

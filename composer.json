@@ -4,14 +4,15 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
-        "php": ">=8.4",
+        "php": ">=8.3",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "ext-zlib": "*",
         "doctrine/dbal": "^3.9.4",
         "doctrine/doctrine-bundle": "^2.13.2",
-        "doctrine/doctrine-migrations-bundle": "^3.4",
+        "doctrine/doctrine-migrations-bundle": "^3.4.1",
         "doctrine/orm": "^3.3.1",
-        "phpdocumentor/reflection-docblock": "^5.6",
+        "phpdocumentor/reflection-docblock": "^5.6.1",
         "phpstan/phpdoc-parser": "^2.0",
         "symfony/console": "7.2.*",
         "symfony/dotenv": "7.2.*",
@@ -20,9 +21,9 @@
         "symfony/property-access": "7.2.*",
         "symfony/property-info": "7.2.*",
         "symfony/runtime": "7.2.*",
+        "symfony/security-bundle": "7.2.*",
         "symfony/serializer": "7.2.*",
-        "symfony/yaml": "7.2.*",
-        "ext-zlib": "*"
+        "symfony/yaml": "7.2.*"
     },
     "require-dev": {
         "symfony/maker-bundle": "^1.62.1",

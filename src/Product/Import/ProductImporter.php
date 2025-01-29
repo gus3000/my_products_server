@@ -25,7 +25,7 @@ class ProductImporter
                 intval($productDto->code),
                 $productDto->name,
             );
-            $product->setBrand($productDto->brands);
+            $product->setBrands($productDto->brands);
             $this->entityManager->persist($product);
             if ($i++ >= $this->maxFlushSize) {
                 $this->entityManager->flush();
