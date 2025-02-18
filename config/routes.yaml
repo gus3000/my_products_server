@@ -1,5 +1,10 @@
-controllers:
+product:
     resource:
         path: ../src/Product/Controller/
         namespace: App\Product\Controller
+    type: attribute
+security:
+    resource:
+        path: ../src/Security/Controller/
+        namespace: App\Security\Controller
     type: attribute

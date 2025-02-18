@@ -11,7 +11,9 @@ class UserWithProducts extends Story
 {
     public function build(): void
     {
-        $user = UserFactory::new()->create();
+        $user = UserFactory::createOne([
+            'password' => '1234',
+        ]);
 
         $products = ProductFactory::createMany(5);
 

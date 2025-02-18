@@ -5,7 +5,8 @@ in
 
 pkgs.mkShellNoCC {
   packages = with pkgs; [
-        php84
-        php84Packages.castor
+        php83
+        php83Packages.castor
+        qrencode
   ];
 }
