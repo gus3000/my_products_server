@@ -20,7 +20,7 @@ class UserProductsController extends AbstractController
     ) {
     }
 
-    #[Route('/me/products')]
+    #[Route('/me/products', name: 'my_products', methods: ['GET'])]
     public function index(#[CurrentUser] User $user): JsonResponse
     {
         $products = $this->productRepository->findAllByUser($user);

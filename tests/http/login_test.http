@@ -5,6 +5,15 @@ Content-Type: application/json
   "username": "sherwood62",
   "password": "1234"
 }
+
 ###
 
 GET https://my-products-server.ddev.site/me/products
+
+###
+POST https://my-products-server.ddev.site/me/product
+Content-Type: application/json
+
+{
+  "gtin": "5000157024671"
+}

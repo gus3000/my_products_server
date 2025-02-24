@@ -6,6 +6,8 @@ use App\Repository\XUserProductRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: XUserProductRepository::class)]
+#[ORM\Table(name: 'xuser_product')]
+#[ORM\UniqueConstraint('xuser_product_unique_idx', columns: ['user_id', 'product_id'])]
 class XUserProduct
 {
     #[ORM\Id]
@@ -18,8 +20,11 @@ class XUserProduct
     private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'xUserProducts')]
-    #[ORM\JoinColumn(nullable: false, referencedColumnName: 'gtin')]
+    #[ORM\JoinColumn(referencedColumnName: 'gtin', nullable: false)]
     private ?Product $product = null;
+
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $note;
 
     public function getId(): ?int
     {
@@ -46,6 +51,18 @@ class XUserProduct
     public function setProduct(?Product $product): static
     {
         $this->product = $product;
+
+        return $this;
+    }
+
+    public function getNote(): ?int
+    {
+        return $this->note;
+    }
+
+    public function setNote(?int $note): XUserProduct
+    {
+        $this->note = $note;
 
         return $this;
     }

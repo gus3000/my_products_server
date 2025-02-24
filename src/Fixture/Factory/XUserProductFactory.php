@@ -50,6 +50,7 @@ final class XUserProductFactory extends PersistentProxyObjectFactory
         return [
             'product' => ProductFactory::new(),
             'user' => UserFactory::new(),
+            'note' => self::faker()->boolean() ? null : self::faker()->numberBetween(1, 5),
         ];
     }
 

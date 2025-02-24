@@ -7,9 +7,6 @@ namespace DoctrineMigrations;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
-/**
- * Auto-generated Migration: Please modify to your needs!
- */
 final class Version20250128181346 extends AbstractMigration
 {
     public function getDescription(): string
@@ -24,8 +21,10 @@ final class Version20250128181346 extends AbstractMigration
           id INT AUTO_INCREMENT NOT NULL,
           user_id INT NOT NULL,
           product_id BIGINT NOT NULL,
+          note INT DEFAULT NULL,
           INDEX IDX_1F1135A3A76ED395 (user_id),
           INDEX IDX_1F1135A34584665A (product_id),
+          UNIQUE INDEX xuser_product_unique_idx (user_id, product_id),
           PRIMARY KEY(id)
         ) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB');
         $this->addSql('ALTER TABLE
