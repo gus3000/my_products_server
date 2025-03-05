@@ -16,3 +16,9 @@ function phpstan(): void
 {
     \Castor\run(['.castor/vendor/bin/phpstan', 'analyze']);
 }
+
+#[AsTask]
+function phpstanBaseline(): void
+{
+    \Castor\run(['.castor/vendor/bin/phpstan', '-b']);
+}

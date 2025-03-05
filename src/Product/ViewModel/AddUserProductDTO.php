@@ -2,11 +2,13 @@
 
 namespace App\Product\ViewModel;
 
-class ProductGtinDTO
+use App\Entity\Enum\UserProductScore;
+
+class AddUserProductDTO
 {
     public function __construct(
         public readonly int $gtin,
-        public readonly ?int $note = null,
+        public readonly ?UserProductScore $score = null,
     ) {
     }
 }

@@ -22,7 +22,8 @@ class Product
     public function __construct(
         #[ORM\Id]
         #[ORM\Column(type: 'bigint', unique: true)]
-        private int $gtin, #[ORM\Column]
+        private string $gtin,
+        #[ORM\Column]
         private string $name)
     {
         $this->xUserProducts = new ArrayCollection();
@@ -38,12 +39,12 @@ class Product
         $this->brands = $brands;
     }
 
-    public function getGtin(): int
+    public function getGtin(): string
     {
         return $this->gtin;
     }
 
-    public function setGtin(int $gtin): void
+    public function setGtin(string $gtin): void
     {
         $this->gtin = $gtin;
     }
@@ -71,18 +72,6 @@ class Product
         if (!$this->xUserProducts->contains($xUserProduct)) {
             $this->xUserProducts->add($xUserProduct);
             $xUserProduct->setProduct($this);
-        }
-
-        return $this;
-    }
-
-    public function removeXUserProduct(XUserProduct $xUserProduct): static
-    {
-        if ($this->xUserProducts->removeElement($xUserProduct)) {
-            // set the owning side to null (unless already changed)
-            if ($xUserProduct->getProduct() === $this) {
-                $xUserProduct->setProduct(null);
-            }
         }
 
         return $this;

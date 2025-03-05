@@ -17,10 +17,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    private int $id;
 
     #[ORM\Column(length: 180)]
-    private ?string $username = null;
+    private string $username;
 
     /**
      * @var list<string> The user roles
@@ -32,7 +32,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
-    private ?string $password = null;
+    private string $password;
 
     /**
      * @var Collection<int, XUserProduct>
@@ -136,18 +136,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         if (!$this->xUserProducts->contains($xUserProduct)) {
             $this->xUserProducts->add($xUserProduct);
             $xUserProduct->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeXUserProduct(XUserProduct $xUserProduct): static
-    {
-        if ($this->xUserProducts->removeElement($xUserProduct)) {
-            // set the owning side to null (unless already changed)
-            if ($xUserProduct->getUser() === $this) {
-                $xUserProduct->setUser(null);
-            }
         }
 
         return $this;

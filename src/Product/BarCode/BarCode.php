@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Product\Code;
+namespace App\Product\BarCode;
 
-class Code
+class BarCode
 {
     private readonly string $code;
 

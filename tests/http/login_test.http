@@ -2,7 +2,7 @@ POST https://my-products-server.ddev.site/login
 Content-Type: application/json
 
 {
-  "username": "sherwood62",
+  "username": "firstUser",
   "password": "1234"
 }
 
@@ -15,5 +15,14 @@ POST https://my-products-server.ddev.site/me/product
 Content-Type: application/json
 
 {
-  "gtin": "5000157024671"
+  "gtin": 5000157024671
+}
+
+###
+POST https://my-products-server.ddev.site/me/product
+Content-Type: application/json
+
+{
+  "gtin": 5000157024671,
+  "score": 3
 }

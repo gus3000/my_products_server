@@ -2,7 +2,8 @@
 
 namespace App\Entity;
 
-use App\Repository\XUserProductRepository;
+use App\Entity\Enum\UserProductScore;
+use App\Product\Repository\XUserProductRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: XUserProductRepository::class)]
@@ -17,52 +18,52 @@ class XUserProduct
 
     #[ORM\ManyToOne(inversedBy: 'xUserProducts')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
+    private User $user;
 
     #[ORM\ManyToOne(inversedBy: 'xUserProducts')]
     #[ORM\JoinColumn(referencedColumnName: 'gtin', nullable: false)]
-    private ?Product $product = null;
+    private Product $product;
 
-    #[ORM\Column(type: 'integer', nullable: true)]
-    private ?int $note;
+    #[ORM\Column(type: 'integer', nullable: true, enumType: UserProductScore::class)]
+    private ?UserProductScore $score;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getUser(): ?User
+    public function getUser(): User
     {
         return $this->user;
     }
 
-    public function setUser(?User $user): static
+    public function setUser(User $user): static
     {
         $this->user = $user;
 
         return $this;
     }
 
-    public function getProduct(): ?Product
+    public function getProduct(): Product
     {
         return $this->product;
     }
 
-    public function setProduct(?Product $product): static
+    public function setProduct(Product $product): static
     {
         $this->product = $product;
 
         return $this;
     }
 
-    public function getNote(): ?int
+    public function getScore(): ?UserProductScore
     {
-        return $this->note;
+        return $this->score;
     }
 
-    public function setNote(?int $note): XUserProduct
+    public function setScore(?UserProductScore $score): XUserProduct
     {
-        $this->note = $note;
+        $this->score = $score;
 
         return $this;
     }

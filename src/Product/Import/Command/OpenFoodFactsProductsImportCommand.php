@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Product\Import\Command;
 
-use App\Product\Code\Code;
+use App\Product\BarCode\BarCode;
 use App\Product\Import\GZipExec;
 use App\Product\Import\GZipExtract;
 use App\Product\Import\ProductImportDTO;
@@ -81,7 +81,7 @@ class OpenFoodFactsProductsImportCommand extends Command
                     return false;
                 }
 
-                $code = new Code($productDTO->code);
+                $code = new BarCode($productDTO->code);
                 if (!$code->isControlKeyValid()) {
                     ++$failed;
 

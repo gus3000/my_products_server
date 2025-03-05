@@ -2,6 +2,7 @@
 
 namespace App\Fixture\Factory;
 
+use App\Entity\Enum\UserProductScore;
 use App\Entity\Product;
 use App\Entity\User;
 use App\Entity\XUserProduct;
@@ -50,7 +51,9 @@ final class XUserProductFactory extends PersistentProxyObjectFactory
         return [
             'product' => ProductFactory::new(),
             'user' => UserFactory::new(),
-            'note' => self::faker()->boolean() ? null : self::faker()->numberBetween(1, 5),
+            'score' => self::faker()->boolean()
+                ? null
+                : self::faker()->randomElement(UserProductScore::class),
         ];
     }
 
