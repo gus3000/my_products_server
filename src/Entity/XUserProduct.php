@@ -25,7 +25,7 @@ class XUserProduct
     private Product $product;
 
     #[ORM\Column(type: 'integer', nullable: true, enumType: UserProductScore::class)]
-    private ?UserProductScore $score;
+    private ?UserProductScore $score = null;
 
     public function getId(): ?int
     {

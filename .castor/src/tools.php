@@ -14,7 +14,7 @@ function csFix(): void
 #[AsTask]
 function phpstan(): void
 {
-    \Castor\run(['.castor/vendor/bin/phpstan', 'analyze']);
+    \Castor\run(['.castor/vendor/bin/phpstan', 'analyze', '--memory-limit=512M']);
 }
 
 #[AsTask]
