@@ -1,8 +1,18 @@
 <?php
 
+use Castor\Attribute\AsContext;
 use Castor\Attribute\AsTask;
+use Castor\Context;
 
 use function Castor\io;
+
+#[AsContext()]
+function csFixerContext(): Context
+{
+    return new Context(environment: [
+        'PHP_CS_FIXER_IGNORE_ENV' => 1,
+    ]);
+}
 
 #[AsTask]
 function csFix(): void
