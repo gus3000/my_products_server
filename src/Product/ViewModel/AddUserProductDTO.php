@@ -4,11 +4,12 @@ namespace App\Product\ViewModel;
 
 use App\Entity\Enum\UserProductScore;
 
-class AddUserProductDTO
+final readonly class AddUserProductDTO
 {
     public function __construct(
-        public readonly int $gtin,
-        public readonly ?UserProductScore $score = null,
+        public int $gtin,
+        public ?string $name = null,
+        public ?UserProductScore $score = null,
     ) {
     }
 }

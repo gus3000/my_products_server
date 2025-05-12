@@ -2,6 +2,7 @@
 
 namespace App\Product\Controller;
 
+use App\Entity\Product;
 use App\Entity\User;
 use App\Product\Repository\ProductRepository;
 use App\Product\Repository\XUserProductRepository;
@@ -30,11 +31,18 @@ class AddUserProductController extends AbstractController
     ): JsonResponse {
         $product = $this->productRepository->findOneByGtin($addUserProductDTO->gtin);
         if ($product === null) {
-            throw new NotFoundHttpException("produit non trouvé avec code {$addUserProductDTO->gtin}");
+            //            throw new NotFoundHttpException("produit non trouvé avec code {$addUserProductDTO->gtin}");
+            $product = new Product(
+                "$addUserProductDTO->gtin",
+                $addUserProductDTO->name ?? "Pas de nom",
+            );
+            $this->productRepository->create($product);
         }
         $existing = $this->xUserProductRepository->findByUserAndProduct($user, $product);
         if ($existing === null) {
-            $userProduct = $this->xUserProductRepository->link($user, $product);
+            $userProduct = $this->xUserProductRepository->link($user, $product)
+                ->setScore($addUserProductDTO->score)
+            ;
         } else {
             $userProduct = $existing->setScore($addUserProductDTO->score);
         }

@@ -32,6 +32,7 @@ POST https://my-products-server.ddev.site/me/product
 Content-Type: application/json
 
 {
-  "gtin": 5000157024671,
+  "gtin": 5000157024672,
+  "name": "pouet",
   "score": 3
 }
