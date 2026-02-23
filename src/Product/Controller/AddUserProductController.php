@@ -34,7 +34,7 @@ class AddUserProductController extends AbstractController
             //            throw new NotFoundHttpException("produit non trouvé avec code {$addUserProductDTO->gtin}");
             $product = new Product(
                 "$addUserProductDTO->gtin",
-                $addUserProductDTO->name ?? "Pas de nom",
+                $addUserProductDTO->name ?? 'Pas de nom',
             );
             $this->productRepository->create($product);
         }

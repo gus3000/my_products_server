@@ -130,14 +130,4 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->xUserProducts;
     }
-
-    public function addXUserProduct(XUserProduct $xUserProduct): static
-    {
-        if (!$this->xUserProducts->contains($xUserProduct)) {
-            $this->xUserProducts->add($xUserProduct);
-            $xUserProduct->setUser($this);
-        }
-
-        return $this;
-    }
 }

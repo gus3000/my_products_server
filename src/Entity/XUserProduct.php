@@ -11,21 +11,27 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\UniqueConstraint('xuser_product_unique_idx', columns: ['user_id', 'product_id'])]
 class XUserProduct
 {
+    public function __construct(
+        #[ORM\ManyToOne(inversedBy: 'xUserProducts')]
+        #[ORM\JoinColumn(nullable: false)]
+        private User $user,
+
+        #[ORM\ManyToOne(inversedBy: 'xUserProducts')]
+        #[ORM\JoinColumn(referencedColumnName: 'gtin', nullable: false)]
+        private Product $product,
+
+        #[ORM\Column(type: 'datetime')]
+        private \DateTimeInterface $date_added,
+
+        #[ORM\Column(type: 'integer', nullable: true, enumType: UserProductScore::class)]
+        private ?UserProductScore $score = null,
+    ) {
+    }
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
-    #[ORM\ManyToOne(inversedBy: 'xUserProducts')]
-    #[ORM\JoinColumn(nullable: false)]
-    private User $user;
-
-    #[ORM\ManyToOne(inversedBy: 'xUserProducts')]
-    #[ORM\JoinColumn(referencedColumnName: 'gtin', nullable: false)]
-    private Product $product;
-
-    #[ORM\Column(type: 'integer', nullable: true, enumType: UserProductScore::class)]
-    private ?UserProductScore $score = null;
 
     public function getId(): ?int
     {
@@ -37,23 +43,14 @@ class XUserProduct
         return $this->user;
     }
 
-    public function setUser(User $user): static
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
     public function getProduct(): Product
     {
         return $this->product;
     }
 
-    public function setProduct(Product $product): static
+    public function getDateAdded(): \DateTimeInterface
     {
-        $this->product = $product;
-
-        return $this;
+        return $this->date_added;
     }
 
     public function getScore(): ?UserProductScore

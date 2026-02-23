@@ -54,6 +54,7 @@ final class XUserProductFactory extends PersistentProxyObjectFactory
             'score' => self::faker()->boolean()
                 ? null
                 : self::faker()->randomElement(UserProductScore::class),
+            'date_added' => self::faker()->dateTime(),
         ];
     }
 

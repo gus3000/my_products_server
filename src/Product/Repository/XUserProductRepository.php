@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Entity\XUserProduct;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Psr\Clock\ClockInterface;
 use Webmozart\Assert\Assert;
 
 /**
@@ -14,8 +15,10 @@ use Webmozart\Assert\Assert;
  */
 class XUserProductRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
+    public function __construct(
+        ManagerRegistry $registry,
+        private readonly ClockInterface $clock,
+    ) {
         parent::__construct($registry, XUserProduct::class);
     }
 
@@ -61,9 +64,11 @@ class XUserProductRepository extends ServiceEntityRepository
 
     public function link(User $user, Product $product): XUserProduct
     {
-        $xUserProduct = new XUserProduct();
-        $xUserProduct->setUser($user);
-        $xUserProduct->setProduct($product);
+        $xUserProduct = new XUserProduct(
+            $user,
+            $product,
+            $this->clock->now()
+        );
         $this->getEntityManager()->persist($xUserProduct);
         $this->getEntityManager()->flush();
 
