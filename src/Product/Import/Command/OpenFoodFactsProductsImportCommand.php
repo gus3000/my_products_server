@@ -23,7 +23,7 @@ use Symfony\Component\Serializer\Exception\MissingConstructorArgumentsException;
 use Symfony\Component\Serializer\SerializerInterface;
 use Webmozart\Assert\Assert;
 
-#[AsCommand(name: 'app:product:import:openfoodfacts', description: 'Hello PhpStorm')]
+#[AsCommand(name: 'app:product:import:openfoodfacts', description: 'Importe les produits depuis la base de données Open Food Facts')]
 class OpenFoodFactsProductsImportCommand extends Command
 {
     public const DOWNLOAD_URL = 'https://static.openfoodfacts.org/data/openfoodfacts-products.jsonl.gz';
@@ -63,8 +63,14 @@ class OpenFoodFactsProductsImportCommand extends Command
         //        $section = new ConsoleSectionOutput($output);
         $debugSection = $output->section();
         //        $progress =new ProgressBar($section);
+
+        ProgressBar::setFormatDefinition('custom', ' %current% products imported -- %message%');
+
+        $progressBar = new ProgressBar($output, 100);
+        $progressBar->setFormat('custom');
         $progress = $io->createProgressBar();
         $progress->setOverwrite(true);
+        $progress->setFormat('custom');
 
         $io->block("checking directory $this->storageDirectory for imported file...");
         //        $extractedFilePath = "$this->storageDirectory/" . self::EXTRACTED_FILE_NAME;
@@ -82,14 +88,14 @@ class OpenFoodFactsProductsImportCommand extends Command
                 }
 
                 $code = new BarCode($productDTO->code);
-                if (!$code->isControlKeyValid()) {
+                if (!$code->isControlKeyValid() || $productDTO->name === '') {
                     ++$failed;
 
                     return false;
                 }
 
                 $progress->advance();
-                $progress->setMessage(''.$productDTO->code);
+                $progress->setMessage($productDTO->code);
                 $products[] = $productDTO;
                 ++$successful;
 
@@ -119,7 +125,7 @@ class OpenFoodFactsProductsImportCommand extends Command
 
         $io->success("successfully imported $successful products");
         if ($failed > 0) {
-            $io->warning("failed to import $failed products");
+            $io->warning("$failed other products were skipped because of incomplete data");
             $io->warning("fields missing :\n".join("\n", array_map(fn ($key) => $key.' x'.$missingFields[$key], array_keys($missingFields))));
         }
 

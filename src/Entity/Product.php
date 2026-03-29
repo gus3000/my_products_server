@@ -24,8 +24,10 @@ class Product
         #[ORM\Column(type: 'bigint', unique: true)]
         private string $gtin,
         #[ORM\Column]
-        private string $name)
-    {
+        private string $name,
+        #[ORM\Column(nullable: true)]
+        private ?string $packagingUrl,
+    ) {
         $this->xUserProducts = new ArrayCollection();
     }
 

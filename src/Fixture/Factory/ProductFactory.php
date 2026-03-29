@@ -41,6 +41,7 @@ final class ProductFactory extends PersistentProxyObjectFactory
             'name' => self::faker()->text(50),
             'gtin' => self::faker()->isbn13(),
             'brands' => join(',', $brands),
+            'packagingUrl' => null,
         ];
     }
 }

@@ -25,3 +25,5 @@ data/*
 ###> phpstan/phpstan ###
 phpstan.neon
 ###< phpstan/phpstan ###
+
+.ddev/var/tmp

@@ -35,6 +35,7 @@ class AddUserProductController extends AbstractController
             $product = new Product(
                 "$addUserProductDTO->gtin",
                 $addUserProductDTO->name ?? 'Pas de nom',
+                null,
             );
             $this->productRepository->create($product);
         }

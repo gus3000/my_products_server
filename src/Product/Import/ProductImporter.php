@@ -14,7 +14,7 @@ class ProductImporter
     }
 
     /**
-     * @param ProductImportDTO[] $productDtos
+     * @param list<ProductImportDTO> $productDtos
      */
     public function __invoke(array $productDtos): void
     {
@@ -23,6 +23,7 @@ class ProductImporter
             $product = new Product(
                 $productDto->code,
                 $productDto->name,
+                packagingUrl: $productDto->packagingImageURL,
             );
             $product->setBrands($productDto->brands);
             $this->entityManager->persist($product);
